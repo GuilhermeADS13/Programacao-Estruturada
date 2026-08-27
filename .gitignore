@@ -1,0 +1,17 @@
+# Binarios compilados
+*.exe
+*.o
+*.obj
+*.out
+*.a
+*.dll
+
+# Arquivos de depuracao
+*.pdb
+*.ilk
+*.dSYM/
+
+# Backups e temporarios
+*.bak
+*~
+*.tmp
