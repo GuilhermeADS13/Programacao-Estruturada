@@ -13,6 +13,12 @@ int main(){
     float dot = vector_dot(vetor1, vetor2, n);
 
     printf("%f", dot);
+    
+    if ((dot!=0)) {
+        printf("Os vetores nao sao ortogonais\n");
+    } else {
+        printf("Os vetores  sao ortogonais\n");
+    }
 
     free(vetor1);
     free(vetor2);
