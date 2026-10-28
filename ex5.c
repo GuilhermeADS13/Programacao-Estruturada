@@ -13,7 +13,8 @@ struct array{
 Array* Array_Read(ui N);
 void Array_Destroy(Array* array);
 void Array_Print(Array* array);
-ui Array_Search(Array* array, float value);
+int Array_Search(Array* array, float value);
+void Array_Print_Duplicates(Array* array, float value);
 
 int main(){
     printf("Enter Array Size: \n");
@@ -29,20 +30,44 @@ int main(){
     scanf("%f", &value);
     
     printf("Searching for value: %f\n", value);
-    ui key = Array_Search(array, value);
-
-    // Forma simples: apenas olhamos para o 'key' como inteiro para ver se é negativo
-    if((int)key < 0){
-        printf("Value not found!");
-    } else {
-        printf("Value found at key: %u", key);
-    }
+    
+   
+    Array_Print_Duplicates(array, value);
 
     Array_Destroy(array);
     return 0;
 }
 
-ui Array_Search(Array* array, float value){
+void Array_Print_Duplicates(Array* array, float value){
+    int key = Array_Search(array, value);
+
+    if(key < 0){
+        printf("Value not found!\n");
+    } else {
+        int duplicado = key;
+        
+        while(duplicado >= 0 && *(array->values + duplicado) == value){
+            duplicado--;
+        }
+        duplicado++;
+
+        printf("indices duplicados: ");
+        for(int i = duplicado; i <= key; i++){
+            printf("%d ", i);
+        }
+        printf("\n");
+
+        printf("valores duplicado: ");
+    for(int i = duplicado; i <= key; i++){
+        printf("%f ", *(array->values + i));
+    }
+    printf("\n");
+        
+    }
+    
+}
+
+int Array_Search(Array* array, float value){
     ui i = 0;
     bool found = false;
 
@@ -54,7 +79,7 @@ ui Array_Search(Array* array, float value){
     }
     
     if(!found){
-        return -i - 1;
+        return -1;
     }
     
     return i - 1; 
