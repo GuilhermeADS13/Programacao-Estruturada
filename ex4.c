@@ -7,10 +7,7 @@ void Matrix_Destroy(int** A, int rows);
 void Matrix_Print(int** A, int rows, int columns);
 int** Matrix_Transpose(int** A, int* rows, int* columns);
 int** Matrix_Multiply(int** A, int rowsA, int columnsA, int** B, int rowsB, int columnsB);
-double** Matrix_MultiplyDouble(int** A, int rowsA, int columnsA, double** B, int rowsB, int columnsB);
-double** Matrix_Inversa(int** A);
-void Matrix_PrintDouble(double** A, int rows, int columns);
-void Matrix_DestroyDouble(double** A, int rows);
+int** Matrix_Inversa(int** A);
 
 int main(){
 
@@ -39,13 +36,17 @@ int main(){
     if(rowsA == 2 && columnsA == 2){
         int calc = *(*(A+0)+0) * *(*(A+1)+1) - *(*(A+0)+1) * *(*(A+1)+0);
 
-        double** Ainversa = Matrix_Inversa(A);
-        printf("Matrix A = (1/%d) *\n", calc);
-        Matrix_PrintDouble(Ainversa, 2, 2);
+        int** Ainversa = Matrix_Inversa(A);
+        printf("Matrix A^-1 = (1/%d) *\n", calc);
+        Matrix_Print(Ainversa, 2, 2);
 
-        double** I = Matrix_MultiplyDouble(A, 2, 2, Ainversa, 2, 2);
+        int** I = Matrix_Multiply(Ainversa, 2, 2, A, 2, 2);
         printf("Matrix A^-1 A = %d * I:\n", calc);
-        }
+        Matrix_Print(I, 2, 2);
+
+        Matrix_Destroy(Ainversa, 2);
+        Matrix_Destroy(I, 2);
+    }
 
     Matrix_Destroy(A, rowsA);
     // Matrix_Destroy(B, rowsB);
@@ -126,35 +127,15 @@ int** Matrix_Multiply(int** A, int rowsA, int columnsA, int** B, int rowsB, int 
 }
 
 
-double** Matrix_MultiplyDouble(int** A, int rowsA, int columnsA, double** B, int rowsB, int columnsB){
-    double** C = malloc(sizeof(double*) * rowsA);
+int** Matrix_Inversa(int** A){
+    int a = *(*(A + 0) + 0);
+    int b = *(*(A + 0) + 1);
+    int c = *(*(A + 1) + 0);
+    int d = *(*(A + 1) + 1);
 
-    for(int i = 0; i < rowsA; i++){
-        *(C + i) = malloc(sizeof(double) * columnsB);
-        for(int j = 0; j < columnsB; j++){
-            double Cij = 0.0;
-            for(int k = 0; k < columnsA; k++){
-                double Aik = (double) *(*(A+i)+k);
-                double Bkj = *(*(B+k)+j);
-                Cij += Aik * Bkj;
-            }
-            *(*(C+i)+j) = Cij;
-        }
-    }
-
-    return C;
-}
-
-
-double** Matrix_Inversa(int** A){
-    double a = *(*(A + 0) + 0);
-    double b = *(*(A + 0) + 1);
-    double c = *(*(A + 1) + 0);
-    double d = *(*(A + 1) + 1);
-
-    double** Ainversa = malloc(sizeof(double*) * 2);
-    *(Ainversa + 0) = malloc(sizeof(double) * 2);
-    *(Ainversa + 1) = malloc(sizeof(double) * 2);
+    int** Ainversa = malloc(sizeof(int*) * 2);
+    *(Ainversa + 0) = malloc(sizeof(int) * 2);
+    *(Ainversa + 1) = malloc(sizeof(int) * 2);
 
     *(*(Ainversa + 0) + 0) =  d;
     *(*(Ainversa + 0) + 1) = -b;
@@ -163,5 +144,3 @@ double** Matrix_Inversa(int** A){
 
     return Ainversa;
 }
-
-
